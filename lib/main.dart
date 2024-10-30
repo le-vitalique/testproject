@@ -55,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
           builder: (context) => const QrCodeScanner(title: 'test title'),
         ),
       );
-      _formKey.currentState!.reset();
+      //_formKey.currentState!.reset();
     }
   }
 
@@ -73,59 +73,47 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
         centerTitle: true,
       ),
-      body: Center(
+      body: Form(
+        key: _formKey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Form(
-              key: _formKey,
-              child: Column(
-                children: <Widget>[
-                  TextFormField(
-                    key: const Key('username'),
-                    controller: _usernameController,
-                    decoration: const InputDecoration(labelText: 'Username'),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Введите имя пользователя';
-                      } else if (value != 'admin') {
-                        return 'Неверные данные';
-                      } else {
-                        return null;
-                      }
-                    },
-                  ),
-                  TextFormField(
-                    key: const Key('password'),
-                    controller: _passwordController,
-                    obscureText: true,
-                    decoration: const InputDecoration(labelText: 'Password'),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Введите пароль';
-                      } else if (value != '12345') {
-                        return 'Неверные данные';
-                      } else {
-                        return null;
-                      }
-                    },
-                  ),
-                  TextButton(
-                    key: const Key('submit'),
-                    onPressed: _submitForm,
-                    child: const Text('Войти'),
-                  ),
-                ],
-              ),
+          children: <Widget>[
+            TextFormField(
+              key: const Key('username'),
+              controller: _usernameController,
+              decoration: const InputDecoration(labelText: 'Username'),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Введите имя пользователя';
+                } else if (value != 'admin') {
+                  return 'Неверные данные';
+                } else {
+                  return null;
+                }
+              },
+            ),
+            TextFormField(
+              key: const Key('password'),
+              controller: _passwordController,
+              obscureText: true,
+              decoration: const InputDecoration(labelText: 'Password'),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Введите пароль';
+                } else if (value != '12345') {
+                  return 'Неверные данные';
+                } else {
+                  return null;
+                }
+              },
+            ),
+            SizedBox(
+              height: 20,
             ),
             ElevatedButton(
-              child: const Text('Scan QR code'),
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) =>
-                      const QrCodeScanner(title: 'test title'),
-                ),
-              ),
+              key: const Key('submit'),
+              onPressed: _submitForm,
+              child: const Text('Войти'),
             ),
           ],
         ),
