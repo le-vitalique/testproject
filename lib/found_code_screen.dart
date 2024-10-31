@@ -80,19 +80,20 @@ class _FoundCodeScreenState extends State<FoundCodeScreen> {
             icon: const Icon(Icons.arrow_back),
           ),
         ),
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text('Scanned Code:'),
-                Text(widget.value),
-                buildUsers(contacts),
-              ],
-            ),
-          ),
-        ),
+        body: buildUsers(contacts),
+        // Center(
+        //   child: Padding(
+        //     padding: const EdgeInsets.all(20),
+        //     child: Column(
+        //       mainAxisSize: MainAxisSize.min,
+        //       children: [
+        //         const Text('Scanned Code:'),
+        //         Text(widget.value),
+        //         // buildUsers(contacts),
+        //       ],
+        //     ),
+        //   ),
+        // ),
       ),
     );
   }
