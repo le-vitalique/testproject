@@ -101,7 +101,7 @@ class _FoundCodeScreenState extends State<FoundCodeScreen> {
             onPressed: () {
               _save();
             },
-            child: Text('Сохранить'),
+            child: const Text('Сохранить'),
           ),
         ],
       ),
