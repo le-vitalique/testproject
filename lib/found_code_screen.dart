@@ -3,12 +3,10 @@ import 'package:testproject/contact.dart';
 
 class FoundCodeScreen extends StatefulWidget {
   final List<Contact> contactsList;
-  final Function() screenClosed;
 
   const FoundCodeScreen({
     super.key,
     required this.contactsList,
-    required this.screenClosed,
   });
 
   @override
@@ -82,39 +80,30 @@ class _FoundCodeScreenState extends State<FoundCodeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: true,
-      onPopInvokedWithResult: (bool didPop, Object? result) {
-        if (didPop) {
-          print('PopScope called');
-          widget.screenClosed();
-        }
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Found Code'),
-          centerTitle: true,
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(Icons.arrow_back),
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Found Code'),
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.arrow_back),
         ),
-        body: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text('Scanned Code:'),
-              const SizedBox(
-                height: 20,
-              ),
-              Expanded(
-                child: buildUsers(widget.contactsList),
-              ),
-            ],
-          ),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('Scanned Code:'),
+            const SizedBox(
+              height: 20,
+            ),
+            Expanded(
+              child: buildUsers(widget.contactsList),
+            ),
+          ],
         ),
       ),
     );

@@ -23,13 +23,13 @@ class QrCodeScanner extends StatefulWidget {
   State<QrCodeScanner> createState() => _QrCodeScannerState();
 }
 
-class _QrCodeScannerState extends State<QrCodeScanner> with WidgetsBindingObserver {
+class _QrCodeScannerState extends State<QrCodeScanner> {
   final MobileScannerController controller = MobileScannerController(
     // detectionSpeed: DetectionSpeed.noDuplicates,
+    // autoStart: false,
     formats: const <BarcodeFormat>[BarcodeFormat.qrCode],
     torchEnabled: true,
   );
-  bool _screenOpened = false;
 
   @override
   Widget build(BuildContext context) {
@@ -39,52 +39,38 @@ class _QrCodeScannerState extends State<QrCodeScanner> with WidgetsBindingObserv
     );
   }
 
-  // TODO: stop widget on found barcode
-  void _foundBarcode(BarcodeCapture capture) {
-    if (!_screenOpened) {
-      final List<Barcode> barcodes = capture.barcodes;
+  void _foundBarcode(BarcodeCapture capture) async {
+    final List<Barcode> barcodes = capture.barcodes;
 
-      for (final barcode in barcodes) {
-        bool isValid = false;
-        late List<Contact> contactsList;
-        try {
-          Iterable contact = jsonDecode(barcode.rawValue.toString());
-          contactsList = List<Contact>.from(
-              contact.map((model) => Contact.fromJson(model)));
-          isValid = true;
-        } on FormatException {
-          print('caught format exception');
-        } catch (e) {
-          print('caught exception');
-        }
+    for (final barcode in barcodes) {
+      bool isValid = false;
+      late List<Contact> contactsList;
+      try {
+        Iterable contact = jsonDecode(barcode.rawValue.toString());
+        contactsList =
+            List<Contact>.from(contact.map((model) => Contact.fromJson(model)));
+        isValid = true;
+      } on FormatException {
+        print('caught format exception');
+      } catch (e) {
+        print('caught exception');
+      }
 
-        // if code is List<Contact> then show FoundCodeScreen
-        if (isValid) {
-          print(contactsList.length);
+      // if code is List<Contact> then show FoundCodeScreen
+      if (isValid) {
+        print(contactsList.length);
 
-          _screenOpened = true;
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => FoundCodeScreen(
-                screenClosed: _screenWasClosed,
-                contactsList: contactsList,
-              ),
+        controller.stop();
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => FoundCodeScreen(
+              contactsList: contactsList,
             ),
-          );
-        }
+          ),
+        );
+        controller.start();
       }
     }
-  }
-
-  void _screenWasClosed() {
-    _screenOpened = false;
-  }
-
-  @override
-  void dispose() {
-    controller.stop();
-    controller.dispose();
-    super.dispose();
   }
 }
