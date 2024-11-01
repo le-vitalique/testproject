@@ -54,9 +54,9 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
-        centerTitle: true,
       ),
-      body: Form(
+      body:
+      Padding(padding: EdgeInsets.all(10) ,child: Form(
         key: _loginFormStateKey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -64,7 +64,10 @@ class _MyHomePageState extends State<MyHomePage> {
             TextFormField(
               key: const Key('username'),
               controller: _usernameController,
-              decoration: const InputDecoration(labelText: 'Имя пользователя'),
+              decoration: const InputDecoration(
+                icon: Icon(Icons.person),
+                labelText: 'Имя пользователя',
+              ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Введите имя пользователя';
@@ -75,11 +78,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 }
               },
             ),
+            SizedBox(height: 10,),
             TextFormField(
               key: const Key('password'),
               controller: _passwordController,
               obscureText: true,
-              decoration: const InputDecoration(labelText: 'Пароль'),
+              decoration: const InputDecoration(
+                icon: Icon(Icons.password),
+                labelText: 'Пароль',
+              ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Введите пароль';
@@ -100,11 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ],
         ),
-      ),
+      ),)
     );
   }
 }
-
-
-
-

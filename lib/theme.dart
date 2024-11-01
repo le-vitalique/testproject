@@ -16,6 +16,9 @@ final ThemeData appTheme = ThemeData(
   //
   // This works for code too, not just values: Most code changes can be
   // tested with just a hot reload.
-  colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+  colorScheme: ColorScheme.fromSeed(seedColor: Colors.redAccent),
   useMaterial3: true,
+  inputDecorationTheme: const InputDecorationTheme(border: OutlineInputBorder(borderRadius: BorderRadius.zero), ),
+  appBarTheme: const AppBarTheme(color: Colors.redAccent, centerTitle: true),
+  fontFamily: 'Montserrat',
 );

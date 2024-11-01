@@ -40,10 +40,12 @@ class _FoundCodeScreenState extends State<FoundCodeScreen> {
             key: _contactFormStateKeys[index],
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Expanded(
                   child: TextFormField(
                     key: const Key('name'),
+                    // decoration: const InputDecoration(border: UnderlineInputBorder()),
                     controller: _nameControllers[index],
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -57,6 +59,7 @@ class _FoundCodeScreenState extends State<FoundCodeScreen> {
                 Expanded(
                   child: TextFormField(
                     key: const Key('phone'),
+                    decoration: const InputDecoration(border: UnderlineInputBorder()),
                     controller: _phoneControllers[index],
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -86,7 +89,6 @@ class _FoundCodeScreenState extends State<FoundCodeScreen> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('Контакты'),
-        centerTitle: true,
       ),
       body: Column(
         children: [
