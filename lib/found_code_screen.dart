@@ -67,6 +67,7 @@ class _FoundCodeScreenState extends State<FoundCodeScreen> {
             padding: const EdgeInsets.all(20),
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text('Scanned Code:'),
                 // Text(widget.value),
