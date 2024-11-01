@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:testproject/contact.dart';
 
@@ -20,9 +21,10 @@ class _FoundCodeScreenState extends State<FoundCodeScreen> {
 
   void _submitForm(GlobalKey<FormState> key, int index) {
     if (key.currentState!.validate()) {
-      // TODO: Save value
       widget.contactsList[index].name = _nameControllers[index].text;
-      widget.contactsList[index].phone = _nameControllers[index].text;
+      widget.contactsList[index].phone = _phoneControllers[index].text;
+      String encoded = jsonEncode(widget.contactsList);
+      print(encoded);
     }
   }
 
@@ -88,7 +90,6 @@ class _FoundCodeScreenState extends State<FoundCodeScreen> {
       appBar: AppBar(
         title: const Text('Контакты'),
         centerTitle: true,
-
       ),
       body: Column(
         children: [
@@ -97,11 +98,18 @@ class _FoundCodeScreenState extends State<FoundCodeScreen> {
             height: 20,
           ),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              _save();
+            },
             child: Text('Сохранить'),
           ),
         ],
       ),
     );
+  }
+
+  void _save() {
+    String encoded = jsonEncode(widget.contactsList);
+    print(encoded);
   }
 }
