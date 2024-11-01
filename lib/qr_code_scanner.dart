@@ -52,9 +52,9 @@ class _QrCodeScannerState extends State<QrCodeScanner> {
               contact.map((model) => Contact.fromJson(model)));
           isValid = true;
         } on FormatException {
-          print('format exception');
+          print('caught format exception');
         } catch (e) {
-          print('another exception');
+          print('caught exception');
         }
 
         // if code is List<Contact> then show FoundCodeScreen
