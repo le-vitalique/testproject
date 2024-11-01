@@ -27,19 +27,19 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _loginFormStateKey = GlobalKey<FormState>();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   void _submitForm() {
-    if (_formKey.currentState!.validate()) {
+    if (_loginFormStateKey.currentState!.validate()) {
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => const QrCodeScanner(title: 'test title'),
         ),
       );
-      _formKey.currentState!.reset();
+      _loginFormStateKey.currentState!.reset();
     }
   }
 
@@ -58,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
         centerTitle: true,
       ),
       body: Form(
-        key: _formKey,
+        key: _loginFormStateKey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
