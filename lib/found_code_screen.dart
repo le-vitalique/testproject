@@ -31,8 +31,10 @@ class _FoundCodeScreenState extends State<FoundCodeScreen> {
   // }
 
   final GlobalKey<FormState> _formKey1 = GlobalKey<FormState>();
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
+  // final TextEditingController _nameController = TextEditingController();
+  // final TextEditingController _phoneController = TextEditingController();
+  final List<TextEditingController>  _nameControllers = [];
+  final List<TextEditingController> _phoneControllers = [];
 
   void _submitForm() {
     if (_formKey1.currentState!.validate()) {
@@ -44,7 +46,13 @@ class _FoundCodeScreenState extends State<FoundCodeScreen> {
         shrinkWrap: true,
         itemCount: contacts.length,
         itemBuilder: (context, index) {
+
           final contact = contacts[index];
+          _nameControllers.add(TextEditingController(text: contact.name));
+          _phoneControllers.add(TextEditingController(text: contact.phone));
+
+
+
           return Form(
             key: _formKey1,
             child: Row(
@@ -52,8 +60,7 @@ class _FoundCodeScreenState extends State<FoundCodeScreen> {
               children: <Widget>[
                 Expanded(child: TextFormField(
                   key: const Key('name'),
-                  initialValue: contact.name,
-                  controller: _nameController,
+                  controller: _nameControllers[index],
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Введите имя';
@@ -64,8 +71,7 @@ class _FoundCodeScreenState extends State<FoundCodeScreen> {
                 ),),
                 Expanded(child: TextFormField(
                   key: const Key('phone'),
-                  initialValue: contact.phone,
-                  controller: _phoneController,
+                  controller: _phoneControllers[index],
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Введите телефон';
@@ -125,7 +131,7 @@ class _FoundCodeScreenState extends State<FoundCodeScreen> {
               children: [
                 const Text('Scanned Code:'),
                 // Text(widget.value),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Expanded(
