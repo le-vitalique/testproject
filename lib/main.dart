@@ -39,7 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
           builder: (context) => const QrCodeScanner(title: 'test title'),
         ),
       );
-      //_formKey.currentState!.reset();
+      _formKey.currentState!.reset();
     }
   }
 
