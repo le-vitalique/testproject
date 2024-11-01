@@ -64,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
             TextFormField(
               key: const Key('username'),
               controller: _usernameController,
-              decoration: const InputDecoration(labelText: 'Username'),
+              decoration: const InputDecoration(labelText: 'Имя пользователя'),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Введите имя пользователя';
@@ -79,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
               key: const Key('password'),
               controller: _passwordController,
               obscureText: true,
-              decoration: const InputDecoration(labelText: 'Password'),
+              decoration: const InputDecoration(labelText: 'Пароль'),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Введите пароль';
