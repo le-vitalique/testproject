@@ -91,14 +91,6 @@ class _FoundCodeScreenState extends State<FoundCodeScreen> {
               ],
             ),
           );
-          //   Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //   children: [
-          //     Text(contact.name),
-          //     Text(contact.phone),
-          //   ],
-          // );
-          //Text(contact.name);
         },
       );
 
