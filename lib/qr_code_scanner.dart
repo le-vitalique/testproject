@@ -38,6 +38,7 @@ class _QrCodeScannerState extends State<QrCodeScanner> {
     );
   }
 
+  // TODO: stop widget on found barcode
   void _foundBarcode(BarcodeCapture capture) {
     if (!_screenOpened) {
       final List<Barcode> barcodes = capture.barcodes;
@@ -66,7 +67,6 @@ class _QrCodeScannerState extends State<QrCodeScanner> {
             MaterialPageRoute(
               builder: (context) => FoundCodeScreen(
                 screenClosed: _screenWasClosed,
-                // value: barcode.rawValue.toString(),
                 value: contacts,
               ),
             ),

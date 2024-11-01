@@ -41,7 +41,6 @@ class _FoundCodeScreenState extends State<FoundCodeScreen> {
   }
 
   Widget buildUsers(List<Contact> contacts) => ListView.builder(
-        // shrinkWrap: true,
         itemCount: contacts.length,
         itemBuilder: (context, index) {
           final contact = contacts[index];
