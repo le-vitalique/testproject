@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:testproject/contact.dart';
 import 'package:testproject/found_code_screen.dart';
 
 class QrCodeScanner extends StatefulWidget {
@@ -23,7 +26,7 @@ class QrCodeScanner extends StatefulWidget {
 class _QrCodeScannerState extends State<QrCodeScanner> {
   final MobileScannerController controller = MobileScannerController(
     // detectionSpeed: DetectionSpeed.noDuplicates,
-    formats: const<BarcodeFormat>[BarcodeFormat.qrCode],
+    formats: const <BarcodeFormat>[BarcodeFormat.qrCode],
   );
   bool _screenOpened = false;
 
@@ -40,7 +43,30 @@ class _QrCodeScannerState extends State<QrCodeScanner> {
       final List<Barcode> barcodes = capture.barcodes;
 
       for (final barcode in barcodes) {
-        print(barcode.rawValue);
+        Iterable contact = jsonDecode(barcode.rawValue.toString());
+
+        // late List<Contact> contacts;
+        // final data =
+        //     List<Contact>.from(contact.map((model) => Contact.fromJson(model)));
+        // if (data is List<Contact>) {
+        //   print('ok');
+        //   contacts = data;
+        // } else {
+        //   print('not ok');
+        // }
+
+        late List<Contact> contacts;
+        try {
+          contacts = List<Contact>.from(
+              contact.map((model) => Contact.fromJson(model)));
+          // print(barcode.rawValue);
+        } on FormatException {
+          print('format exception');
+        } catch (e) {
+          print('another exception');
+        }
+
+        print(contacts.length);
 
         _screenOpened = true;
         Navigator.push(

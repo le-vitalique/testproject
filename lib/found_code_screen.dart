@@ -17,35 +17,15 @@ class FoundCodeScreen extends StatefulWidget {
 }
 
 class _FoundCodeScreenState extends State<FoundCodeScreen> {
-  List <Contact> contacts = getContacts();
-  static List<Contact> getContacts() {
+  List<Contact> contacts = getContacts();
 
+  static List<Contact> getContacts() {
     const data = [
-      {
-        "id": 0,
-        "name": "Rosalind Charles",
-        "phone": "+1 (854) 436-2113"
-      },
-      {
-        "id": 1,
-        "name": "Rosemarie Stark",
-        "phone": "+1 (902) 559-3648"
-      },
-      {
-        "id": 2,
-        "name": "Massey Parker",
-        "phone": "+1 (887) 412-2951"
-      },
-      {
-        "id": 3,
-        "name": "Koch Whitney",
-        "phone": "+1 (918) 473-3084"
-      },
-      {
-        "id": 4,
-        "name": "Padilla Wolfe",
-        "phone": "+1 (931) 480-3519"
-      }
+      {"id": 0, "name": "Rosalind Charles", "phone": "+1 (854) 436-2113"},
+      {"id": 1, "name": "Rosemarie Stark", "phone": "+1 (902) 559-3648"},
+      {"id": 2, "name": "Massey Parker", "phone": "+1 (887) 412-2951"},
+      {"id": 3, "name": "Koch Whitney", "phone": "+1 (918) 473-3084"},
+      {"id": 4, "name": "Padilla Wolfe", "phone": "+1 (931) 480-3519"}
     ];
 
     return data.map<Contact>(Contact.fromJson).toList();
@@ -80,20 +60,23 @@ class _FoundCodeScreenState extends State<FoundCodeScreen> {
             icon: const Icon(Icons.arrow_back),
           ),
         ),
-        body: buildUsers(contacts),
-        // Center(
-        //   child: Padding(
-        //     padding: const EdgeInsets.all(20),
-        //     child: Column(
-        //       mainAxisSize: MainAxisSize.min,
-        //       children: [
-        //         const Text('Scanned Code:'),
-        //         Text(widget.value),
-        //         // buildUsers(contacts),
-        //       ],
-        //     ),
-        //   ),
-        // ),
+        body:
+            //buildUsers(contacts),
+            Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text('Scanned Code:'),
+                Text(widget.value),
+                Expanded(
+                  child: buildUsers(contacts),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

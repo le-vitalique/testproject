@@ -15,4 +15,10 @@ class Contact {
           name: json['name'],
           phone: json['phone'],
         );
+
+  Map<String, dynamic> toJson() => {
+    'id' : id,
+    'name': name,
+    'phone': phone,
+  };
 }
