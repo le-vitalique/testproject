@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:testproject/contact.dart';
 
 class FoundCodeScreen extends StatefulWidget {
-  final String value;
+  // final String value;
+  final List<Contact> value;
   final Function() screenClosed;
 
   const FoundCodeScreen({
@@ -69,9 +70,10 @@ class _FoundCodeScreenState extends State<FoundCodeScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Text('Scanned Code:'),
-                Text(widget.value),
+                // Text(widget.value),
                 Expanded(
-                  child: buildUsers(contacts),
+                  // child: buildUsers(contacts),
+                  child: buildUsers(widget.value),
                 ),
               ],
             ),

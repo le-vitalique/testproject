@@ -56,19 +56,22 @@ class _QrCodeScannerState extends State<QrCodeScanner> {
           print('another exception');
         }
 
-        if  (isValid != false) {
+        // if code is List<Contact> then show FoundCodeScreen
+        if (isValid) {
           print(contacts.length);
-        }
 
-        _screenOpened = true;
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => FoundCodeScreen(
+          _screenOpened = true;
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => FoundCodeScreen(
                 screenClosed: _screenWasClosed,
-                value: barcode.rawValue.toString()),
-          ),
-        );
+                // value: barcode.rawValue.toString(),
+                value: contacts,
+              ),
+            ),
+          );
+        }
       }
     }
   }
