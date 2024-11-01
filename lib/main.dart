@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:testproject/qr_code_scanner.dart';
-import 'package:testproject/theme.dart'
+import 'package:testproject/theme.dart';
 
 void main() => runApp(const MyApp());
 
-// TODO: Add theme
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 

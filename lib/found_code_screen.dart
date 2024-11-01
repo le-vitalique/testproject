@@ -102,21 +102,18 @@ class _FoundCodeScreenState extends State<FoundCodeScreen> {
           ),
         ),
         body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text('Scanned Code:'),
-                const SizedBox(
-                  height: 20,
-                ),
-                Expanded(
-                  child: buildUsers(widget.contactsList),
-                ),
-              ],
-            ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text('Scanned Code:'),
+              const SizedBox(
+                height: 20,
+              ),
+              Expanded(
+                child: buildUsers(widget.contactsList),
+              ),
+            ],
           ),
         ),
       ),

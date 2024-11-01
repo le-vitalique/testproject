@@ -23,10 +23,11 @@ class QrCodeScanner extends StatefulWidget {
   State<QrCodeScanner> createState() => _QrCodeScannerState();
 }
 
-class _QrCodeScannerState extends State<QrCodeScanner> {
+class _QrCodeScannerState extends State<QrCodeScanner> with WidgetsBindingObserver {
   final MobileScannerController controller = MobileScannerController(
     // detectionSpeed: DetectionSpeed.noDuplicates,
     formats: const <BarcodeFormat>[BarcodeFormat.qrCode],
+    torchEnabled: true,
   );
   bool _screenOpened = false;
 
@@ -45,10 +46,10 @@ class _QrCodeScannerState extends State<QrCodeScanner> {
 
       for (final barcode in barcodes) {
         bool isValid = false;
-        late List<Contact> contacts;
+        late List<Contact> contactsList;
         try {
           Iterable contact = jsonDecode(barcode.rawValue.toString());
-          contacts = List<Contact>.from(
+          contactsList = List<Contact>.from(
               contact.map((model) => Contact.fromJson(model)));
           isValid = true;
         } on FormatException {
@@ -59,7 +60,7 @@ class _QrCodeScannerState extends State<QrCodeScanner> {
 
         // if code is List<Contact> then show FoundCodeScreen
         if (isValid) {
-          print(contacts.length);
+          print(contactsList.length);
 
           _screenOpened = true;
           Navigator.push(
@@ -67,7 +68,7 @@ class _QrCodeScannerState extends State<QrCodeScanner> {
             MaterialPageRoute(
               builder: (context) => FoundCodeScreen(
                 screenClosed: _screenWasClosed,
-                value: contacts,
+                contactsList: contactsList,
               ),
             ),
           );
@@ -78,5 +79,12 @@ class _QrCodeScannerState extends State<QrCodeScanner> {
 
   void _screenWasClosed() {
     _screenOpened = false;
+  }
+
+  @override
+  void dispose() {
+    controller.stop();
+    controller.dispose();
+    super.dispose();
   }
 }
