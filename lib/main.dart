@@ -56,7 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body:
-      Padding(padding: EdgeInsets.all(10) ,child: Form(
+      Padding(padding: const EdgeInsets.all(10) ,child: Form(
         key: _loginFormStateKey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -78,7 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 }
               },
             ),
-            SizedBox(height: 10,),
+            const SizedBox(height: 10,),
             TextFormField(
               key: const Key('password'),
               controller: _passwordController,
