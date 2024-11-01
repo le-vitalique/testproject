@@ -30,20 +30,65 @@ class _FoundCodeScreenState extends State<FoundCodeScreen> {
   //   return data.map<Contact>(Contact.fromJson).toList();
   // }
 
+  final GlobalKey<FormState> _formKey1 = GlobalKey<FormState>();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+
+  void _submitForm() {
+    if (_formKey1.currentState!.validate()) {
+      print('form validated');
+    }
+  }
+
   Widget buildUsers(List<Contact> contacts) => ListView.builder(
         shrinkWrap: true,
         itemCount: contacts.length,
         itemBuilder: (context, index) {
           final contact = contacts[index];
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(contact.name),
-              Text(contact.phone),
-              // TextFormField(initialValue: contact.name,),
-              // TextFormField(initialValue: contact.phone,),
-            ],
+          return Form(
+            key: _formKey1,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Expanded(child: TextFormField(
+                  key: const Key('name'),
+                  initialValue: contact.name,
+                  controller: _nameController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Введите имя';
+                    } else {
+                      return null;
+                    }
+                  },
+                ),),
+                Expanded(child: TextFormField(
+                  key: const Key('phone'),
+                  initialValue: contact.phone,
+                  controller: _phoneController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Введите телефон';
+                    } else {
+                      return null;
+                    }
+                  },
+                ),),
+                IconButton(
+                  key: const Key('submit'),
+                  onPressed: _submitForm,
+                  icon: const Icon(Icons.save),
+                ),
+              ],
+            ),
           );
+          //   Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     Text(contact.name),
+          //     Text(contact.phone),
+          //   ],
+          // );
           //Text(contact.name);
         },
       );
