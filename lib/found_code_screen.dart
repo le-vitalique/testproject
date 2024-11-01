@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:testproject/contact.dart';
 
 class FoundCodeScreen extends StatefulWidget {
@@ -76,6 +77,7 @@ class _FoundCodeScreenState extends State<FoundCodeScreen> {
                         const InputDecoration(border: UnderlineInputBorder()),
                     controller: _phoneControllers[index],
                     keyboardType: TextInputType.phone,
+                    inputFormatters: [MaskedInputFormatter('+# (###) ###-####', allowedCharMatcher: RegExp(r'[0-9]'))],
                     onChanged: (value) {
                       if (_disabled[index] == true) {
                         setState(() {
