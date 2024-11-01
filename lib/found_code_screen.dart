@@ -18,7 +18,6 @@ class FoundCodeScreen extends StatefulWidget {
 }
 
 class _FoundCodeScreenState extends State<FoundCodeScreen> {
-
   // List<Contact> contacts = getContacts();
   // static List<Contact> getContacts() {
   //   const data = [
@@ -32,10 +31,20 @@ class _FoundCodeScreenState extends State<FoundCodeScreen> {
   // }
 
   Widget buildUsers(List<Contact> contacts) => ListView.builder(
+        shrinkWrap: true,
         itemCount: contacts.length,
         itemBuilder: (context, index) {
           final contact = contacts[index];
-          return Text(contact.name);
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(contact.name),
+              Text(contact.phone),
+              // TextFormField(initialValue: contact.name,),
+              // TextFormField(initialValue: contact.phone,),
+            ],
+          );
+          //Text(contact.name);
         },
       );
 
@@ -71,6 +80,9 @@ class _FoundCodeScreenState extends State<FoundCodeScreen> {
               children: [
                 const Text('Scanned Code:'),
                 // Text(widget.value),
+                SizedBox(
+                  height: 20,
+                ),
                 Expanded(
                   // child: buildUsers(contacts),
                   child: buildUsers(widget.value),
