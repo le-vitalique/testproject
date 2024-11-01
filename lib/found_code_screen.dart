@@ -18,13 +18,16 @@ class _FoundCodeScreenState extends State<FoundCodeScreen> {
   final List<TextEditingController> _nameControllers = [];
   final List<TextEditingController> _phoneControllers = [];
 
-  void _submitForm(GlobalKey<FormState> key) {
+  void _submitForm(GlobalKey<FormState> key, int index) {
     if (key.currentState!.validate()) {
-      print('form validated');
+      // TODO: Save value
+      widget.contactsList[index].name = _nameControllers[index].text;
+      widget.contactsList[index].phone = _nameControllers[index].text;
     }
   }
 
-  Widget buildUsers(List<Contact> contacts) => ListView.builder(
+  Widget buildContacts(List<Contact> contacts) => ListView.builder(
+        shrinkWrap: true,
         itemCount: contacts.length,
         itemBuilder: (context, index) {
           final Contact contact = contacts[index];
@@ -68,7 +71,7 @@ class _FoundCodeScreenState extends State<FoundCodeScreen> {
                 IconButton(
                   key: const Key('submit'),
                   onPressed: () {
-                    _submitForm(_contactFormStateKeys[index]);
+                    _submitForm(_contactFormStateKeys[index], index);
                   },
                   icon: const Icon(Icons.save),
                 ),
@@ -81,30 +84,23 @@ class _FoundCodeScreenState extends State<FoundCodeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text('Found Code'),
+        title: const Text('Контакты'),
         centerTitle: true,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(Icons.arrow_back),
-        ),
+
       ),
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text('Scanned Code:'),
-            const SizedBox(
-              height: 20,
-            ),
-            Expanded(
-              child: buildUsers(widget.contactsList),
-            ),
-          ],
-        ),
+      body: Column(
+        children: [
+          buildContacts(widget.contactsList),
+          const SizedBox(
+            height: 20,
+          ),
+          ElevatedButton(
+            onPressed: () {},
+            child: Text('Сохранить'),
+          ),
+        ],
       ),
     );
   }

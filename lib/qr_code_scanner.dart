@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:testproject/contact.dart';
@@ -7,15 +6,6 @@ import 'package:testproject/found_code_screen.dart';
 
 class QrCodeScanner extends StatefulWidget {
   const QrCodeScanner({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
 
   final String title;
 
@@ -25,17 +15,30 @@ class QrCodeScanner extends StatefulWidget {
 
 class _QrCodeScannerState extends State<QrCodeScanner> {
   final MobileScannerController controller = MobileScannerController(
-    // detectionSpeed: DetectionSpeed.noDuplicates,
-    // autoStart: false,
     formats: const <BarcodeFormat>[BarcodeFormat.qrCode],
-    torchEnabled: true,
+    torchEnabled: false,
   );
 
   @override
   Widget build(BuildContext context) {
-    return MobileScanner(
-      controller: controller,
-      onDetect: _foundBarcode,
+    return Scaffold(
+      body: Stack(
+        children: [
+          MobileScanner(
+            controller: controller,
+            onDetect: _foundBarcode,
+          ),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: SizedBox(
+              height: 100,
+              width: 100,
+              child: ToggleFlashlightButton(controller: controller),
+              // Icon(Icons.flash_on),
+            ),
+          )
+        ],
+      ),
     );
   }
 
@@ -43,34 +46,89 @@ class _QrCodeScannerState extends State<QrCodeScanner> {
     final List<Barcode> barcodes = capture.barcodes;
 
     for (final barcode in barcodes) {
-      bool isValid = false;
       late List<Contact> contactsList;
       try {
         Iterable contact = jsonDecode(barcode.rawValue.toString());
         contactsList =
             List<Contact>.from(contact.map((model) => Contact.fromJson(model)));
-        isValid = true;
-      } on FormatException {
-        print('caught format exception');
       } catch (e) {
-        print('caught exception');
+        return;
       }
 
       // if code is List<Contact> then show FoundCodeScreen
-      if (isValid) {
-        print(contactsList.length);
-
-        controller.stop();
-        await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => FoundCodeScreen(
-              contactsList: contactsList,
-            ),
+      controller.stop();
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => FoundCodeScreen(
+            contactsList: contactsList,
           ),
-        );
-        controller.start();
-      }
+        ),
+      );
+      controller.start();
     }
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+}
+
+class ToggleFlashlightButton extends StatelessWidget {
+  const ToggleFlashlightButton({required this.controller, super.key});
+
+  final MobileScannerController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder(
+      valueListenable: controller,
+      builder: (context, state, child) {
+        if (!state.isInitialized || !state.isRunning) {
+          return const SizedBox.shrink();
+        }
+
+        switch (state.torchState) {
+          case TorchState.auto:
+            return IconButton(
+              color: Colors.white,
+              iconSize: 32.0,
+              icon: const Icon(Icons.flash_auto),
+              onPressed: () async {
+                await controller.toggleTorch();
+              },
+            );
+          case TorchState.off:
+            return IconButton(
+              color: Colors.white,
+              iconSize: 32.0,
+              icon: const Icon(Icons.flash_off),
+              onPressed: () async {
+                await controller.toggleTorch();
+              },
+            );
+          case TorchState.on:
+            return IconButton(
+              color: Colors.white,
+              iconSize: 32.0,
+              icon: const Icon(Icons.flash_on),
+              onPressed: () async {
+                await controller.toggleTorch();
+              },
+            );
+          case TorchState.unavailable:
+            return const SizedBox.square(
+              dimension: 48.0,
+              child: Icon(
+                Icons.no_flash,
+                size: 32.0,
+                color: Colors.grey,
+              ),
+            );
+        }
+      },
+    );
   }
 }
