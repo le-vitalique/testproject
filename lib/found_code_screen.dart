@@ -30,59 +30,63 @@ class _FoundCodeScreenState extends State<FoundCodeScreen> {
   //   return data.map<Contact>(Contact.fromJson).toList();
   // }
 
-  final GlobalKey<FormState> _formKey1 = GlobalKey<FormState>();
-  // final TextEditingController _nameController = TextEditingController();
-  // final TextEditingController _phoneController = TextEditingController();
-  final List<TextEditingController>  _nameControllers = [];
+  final List<GlobalKey<FormState>> _contactKeys = [];
+  final List<TextEditingController> _nameControllers = [];
   final List<TextEditingController> _phoneControllers = [];
 
-  void _submitForm() {
-    if (_formKey1.currentState!.validate()) {
+  void _submitForm(GlobalKey<FormState> key) {
+    if (key.currentState!.validate()) {
       print('form validated');
     }
   }
 
   Widget buildUsers(List<Contact> contacts) => ListView.builder(
-        shrinkWrap: true,
+        // shrinkWrap: true,
         itemCount: contacts.length,
         itemBuilder: (context, index) {
-
           final contact = contacts[index];
+
+          _contactKeys.add(GlobalKey<FormState>());
+
           _nameControllers.add(TextEditingController(text: contact.name));
           _phoneControllers.add(TextEditingController(text: contact.phone));
 
-
-
           return Form(
-            key: _formKey1,
+            key: _contactKeys[index],
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Expanded(child: TextFormField(
-                  key: const Key('name'),
-                  controller: _nameControllers[index],
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Введите имя';
-                    } else {
-                      return null;
-                    }
-                  },
-                ),),
-                Expanded(child: TextFormField(
-                  key: const Key('phone'),
-                  controller: _phoneControllers[index],
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Введите телефон';
-                    } else {
-                      return null;
-                    }
-                  },
-                ),),
+                Expanded(
+                  child: TextFormField(
+                    key: const Key('name'),
+                    controller: _nameControllers[index],
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Введите имя';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: TextFormField(
+                    key: const Key('phone'),
+                    controller: _phoneControllers[index],
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Введите телефон';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                ),
                 IconButton(
                   key: const Key('submit'),
-                  onPressed: _submitForm,
+                  onPressed: () {
+                    _submitForm(_contactKeys[index]);
+                  },
                   icon: const Icon(Icons.save),
                 ),
               ],
@@ -120,9 +124,7 @@ class _FoundCodeScreenState extends State<FoundCodeScreen> {
             icon: const Icon(Icons.arrow_back),
           ),
         ),
-        body:
-            //buildUsers(contacts),
-            Center(
+        body: Center(
           child: Padding(
             padding: const EdgeInsets.all(20),
             child: Column(
@@ -135,7 +137,6 @@ class _FoundCodeScreenState extends State<FoundCodeScreen> {
                   height: 20,
                 ),
                 Expanded(
-                  // child: buildUsers(contacts),
                   child: buildUsers(widget.value),
                 ),
               ],
