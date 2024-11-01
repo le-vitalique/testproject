@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:testproject/contact.dart';
 
 class FoundCodeScreen extends StatefulWidget {
@@ -17,24 +18,29 @@ class _FoundCodeScreenState extends State<FoundCodeScreen> {
   final List<GlobalKey<FormState>> _contactFormStateKeys = [];
   final List<TextEditingController> _nameControllers = [];
   final List<TextEditingController> _phoneControllers = [];
+  final List<bool> _disabled = [];
 
   void _submitForm(GlobalKey<FormState> key, int index) {
     if (key.currentState!.validate()) {
       widget.contactsList[index].name = _nameControllers[index].text;
       widget.contactsList[index].phone = _phoneControllers[index].text;
+      setState(() {
+        _disabled[index] = true;
+      });
     }
   }
 
-  Widget buildContacts(List<Contact> contacts) => ListView.builder(
+  Widget buildContacts() => ListView.builder(
         shrinkWrap: true,
-        itemCount: contacts.length,
+        itemCount: widget.contactsList.length,
         itemBuilder: (context, index) {
-          final Contact contact = contacts[index];
+          final Contact contact = widget.contactsList[index];
 
           _contactFormStateKeys.add(GlobalKey<FormState>());
 
           _nameControllers.add(TextEditingController(text: contact.name));
           _phoneControllers.add(TextEditingController(text: contact.phone));
+          _disabled.add(true);
 
           return Form(
             key: _contactFormStateKeys[index],
@@ -45,8 +51,16 @@ class _FoundCodeScreenState extends State<FoundCodeScreen> {
                 Expanded(
                   child: TextFormField(
                     key: const Key('name'),
-                    decoration: const InputDecoration(border: UnderlineInputBorder()),
+                    decoration:
+                        const InputDecoration(border: UnderlineInputBorder()),
                     controller: _nameControllers[index],
+                    onChanged: (value) {
+                      if (_disabled[index] == true) {
+                        setState(() {
+                          _disabled[index] = false;
+                        });
+                      }
+                    },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Введите имя';
@@ -59,8 +73,17 @@ class _FoundCodeScreenState extends State<FoundCodeScreen> {
                 Expanded(
                   child: TextFormField(
                     key: const Key('phone'),
-                    decoration: const InputDecoration(border: UnderlineInputBorder()),
+                    decoration:
+                        const InputDecoration(border: UnderlineInputBorder()),
                     controller: _phoneControllers[index],
+                    keyboardType: TextInputType.phone,
+                    onChanged: (value) {
+                      if (_disabled[index] == true) {
+                        setState(() {
+                          _disabled[index] = false;
+                        });
+                      }
+                    },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Введите телефон';
@@ -72,10 +95,12 @@ class _FoundCodeScreenState extends State<FoundCodeScreen> {
                 ),
                 IconButton(
                   key: const Key('submit'),
-                  onPressed: () {
-                    _submitForm(_contactFormStateKeys[index], index);
-                  },
-                  icon: const Icon(Icons.save),
+                  onPressed: _disabled[index]
+                      ? null
+                      : () {
+                          _submitForm(_contactFormStateKeys[index], index);
+                        },
+                  icon: Icon(Icons.save),
                 ),
               ],
             ),
@@ -92,7 +117,7 @@ class _FoundCodeScreenState extends State<FoundCodeScreen> {
       ),
       body: Column(
         children: [
-          buildContacts(widget.contactsList),
+          buildContacts(),
           const SizedBox(
             height: 20,
           ),
