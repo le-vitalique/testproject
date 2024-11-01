@@ -76,10 +76,10 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-     - family: Montserrat
+     - family: Raleway
        fonts:
-         - asset: assets/fonts/Montserrat/static/Montserrat-Regular.ttf
-         - asset: assets/fonts/Montserrat/static/Montserrat-Italic.ttf
+         - asset: assets/fonts/Raleway/static/Raleway-Regular.ttf
+         - asset: assets/fonts/Raleway/static/Raleway-Italic.ttf
            style: italic
   #   - family: Schyler
   #     fonts:

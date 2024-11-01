@@ -20,5 +20,5 @@ final ThemeData appTheme = ThemeData(
   useMaterial3: true,
   inputDecorationTheme: const InputDecorationTheme(border: OutlineInputBorder(borderRadius: BorderRadius.zero), ),
   appBarTheme: const AppBarTheme(color: Colors.redAccent, centerTitle: true),
-  fontFamily: 'Montserrat',
+  fontFamily: 'Raleway',
 );

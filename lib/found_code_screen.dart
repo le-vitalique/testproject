@@ -45,7 +45,7 @@ class _FoundCodeScreenState extends State<FoundCodeScreen> {
                 Expanded(
                   child: TextFormField(
                     key: const Key('name'),
-                    // decoration: const InputDecoration(border: UnderlineInputBorder()),
+                    decoration: const InputDecoration(border: UnderlineInputBorder()),
                     controller: _nameControllers[index],
                     validator: (value) {
                       if (value == null || value.isEmpty) {
