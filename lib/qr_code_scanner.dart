@@ -43,7 +43,6 @@ class _QrCodeScannerState extends State<QrCodeScanner> {
       final List<Barcode> barcodes = capture.barcodes;
 
       for (final barcode in barcodes) {
-        Iterable contact = jsonDecode(barcode.rawValue.toString());
 
         // late List<Contact> contacts;
         // final data =
@@ -55,10 +54,13 @@ class _QrCodeScannerState extends State<QrCodeScanner> {
         //   print('not ok');
         // }
 
+        bool isValid = false;
         late List<Contact> contacts;
         try {
+          Iterable contact = jsonDecode(barcode.rawValue.toString());
           contacts = List<Contact>.from(
               contact.map((model) => Contact.fromJson(model)));
+          isValid = true;
           // print(barcode.rawValue);
         } on FormatException {
           print('format exception');
@@ -66,7 +68,9 @@ class _QrCodeScannerState extends State<QrCodeScanner> {
           print('another exception');
         }
 
-        print(contacts.length);
+        if  (isValid != false) {
+          print(contacts.length);
+        }
 
         _screenOpened = true;
         Navigator.push(
