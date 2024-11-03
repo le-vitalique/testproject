@@ -13,46 +13,34 @@ class ContactList extends StatefulWidget {
 class _ContactListState extends State<ContactList> {
   late Database _db;
   late List<Contact> contactList;
-  bool isInit = false;
 
   @override
   initState() {
     super.initState();
-    // _dbInit();
+    _dbInit().then((value) {
+      contactList = value;
+    });
     print('initState');
   }
 
-  void _dbInit() async {
+  Future<List<Contact>> _dbInit() async {
     var databasesPath = await getDatabasesPath();
     var path = p.join(databasesPath, "contacts.db");
-
+    // Delete the database
     // await deleteDatabase(path);
-    // var exists = await databaseExists(path);
-    // print(exists);
-
     // Open the database, specifying a version and an onCreate callback
     _db = await openDatabase(path, version: 1, onCreate: _onCreate);
-
-    // exists = await databaseExists(path);
-    print('dbinit');
-    print(_db.isOpen);
-
     var mapContactList = await _db.query('contacts');
-    setState(() {
-      contactList = List<Contact>.from(
-          mapContactList.map((model) => Contact.fromJson(model)));
-      print(contactList.length);
-    });
-
-    isInit = true;
+    List<Contact> list = List<Contact>.from(
+        mapContactList.map((model) => Contact.fromJson(model)));
+    print(contactList.length);
+    return list;
   }
 
   _onCreate(Database db, int version) async {
     // Database is created, create the table
     await db.execute(
-        "CREATE TABLE Contacts (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, phone TEXT)");
-    // populate data
-    // await db.insert(...);
+        "CREATE TABLE Contacts (name TEXT, phone TEXT, UNIQUE(name, phone))");
   }
 
   Widget buildContacts() => ListView.builder(
@@ -73,13 +61,14 @@ class _ContactListState extends State<ContactList> {
 
   @override
   Widget build(BuildContext context) {
-    _dbInit();
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('Контакты'),
       ),
-     body: (isInit) ? Padding(padding: const EdgeInsets.all(10.0), child: buildContacts(),) : Container(),
+      body: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: buildContacts(),
+      ),
     );
   }
 }

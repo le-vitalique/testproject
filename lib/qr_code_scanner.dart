@@ -5,9 +5,8 @@ import 'package:testproject/contact.dart';
 import 'package:testproject/add_contacts.dart';
 
 class QrCodeScanner extends StatefulWidget {
-  const QrCodeScanner({super.key, required this.title});
+  const QrCodeScanner({super.key});
 
-  final String title;
 
   @override
   State<QrCodeScanner> createState() => _QrCodeScannerState();
@@ -34,7 +33,6 @@ class _QrCodeScannerState extends State<QrCodeScanner> {
               height: 100,
               width: 100,
               child: ToggleFlashlightButton(controller: controller),
-              // Icon(Icons.flash_on),
             ),
           )
         ],
@@ -56,17 +54,12 @@ class _QrCodeScannerState extends State<QrCodeScanner> {
           final contactMap =
               jsonDecode(barcode.rawValue.toString()) as Map<String, dynamic>;
           final Contact contact = Contact.fromJson(contactMap);
-
-          print(contact.phone);
-          print(contact.name);
-          print(contact.id);
           contactList = [contact];
         } catch (e) {
           return;
         }
       }
 
-      // if code is List<Contact> then show FoundCodeScreen
       controller.stop();
       await Navigator.push(
         context,

@@ -35,7 +35,7 @@ class _MyHomePageState extends State<MyHomePage> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const QrCodeScanner(title: 'test title'),
+          builder: (context) => const QrCodeScanner(),
         ),
       );
       _loginFormStateKey.currentState!.reset();
@@ -44,73 +44,74 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void dispose() {
-    super.dispose();
     _passwordController.dispose();
     _usernameController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Form(
-            key: _loginFormStateKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                TextFormField(
-                  key: const Key('username'),
-                  controller: _usernameController,
-                  decoration: const InputDecoration(
-                    icon: Icon(Icons.person),
-                    labelText: 'Имя пользователя',
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Введите имя пользователя';
-                    } else if (value != 'admin') {
-                      return 'Неверные данные';
-                    } else {
-                      return null;
-                    }
-                  },
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Form(
+          key: _loginFormStateKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              TextFormField(
+                key: const Key('username'),
+                controller: _usernameController,
+                decoration: const InputDecoration(
+                  icon: Icon(Icons.person),
+                  labelText: 'Имя пользователя',
                 ),
-                const SizedBox(
-                  height: 10,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Введите имя пользователя';
+                  } else if (value != 'admin') {
+                    return 'Неверные данные';
+                  } else {
+                    return null;
+                  }
+                },
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              TextFormField(
+                key: const Key('password'),
+                controller: _passwordController,
+                obscureText: true,
+                decoration: const InputDecoration(
+                  icon: Icon(Icons.password),
+                  labelText: 'Пароль',
                 ),
-                TextFormField(
-                  key: const Key('password'),
-                  controller: _passwordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    icon: Icon(Icons.password),
-                    labelText: 'Пароль',
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Введите пароль';
-                    } else if (value != '12345') {
-                      return 'Неверные данные';
-                    } else {
-                      return null;
-                    }
-                  },
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                ElevatedButton(
-                  key: const Key('submit'),
-                  onPressed: _submitForm,
-                  child: const Text('Войти'),
-                ),
-              ],
-            ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Введите пароль';
+                  } else if (value != '12345') {
+                    return 'Неверные данные';
+                  } else {
+                    return null;
+                  }
+                },
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              ElevatedButton(
+                key: const Key('submit'),
+                onPressed: _submitForm,
+                child: const Text('Войти'),
+              ),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

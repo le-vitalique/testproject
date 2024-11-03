@@ -4,13 +4,10 @@ part 'contact.g.dart';
 
 @JsonSerializable()
 class Contact {
-  @JsonKey(includeIfNull: false)
-  int? id;
   String name;
   String phone;
 
   Contact({
-    this.id,
     required this.name,
     required this.phone,
   });

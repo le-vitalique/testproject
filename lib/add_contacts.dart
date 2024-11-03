@@ -23,17 +23,13 @@ class _AddContactsState extends State<AddContacts> {
   final List<TextEditingController> _phoneControllers = [];
   final List<bool> _saved = [];
 
-  void _submitForm(GlobalKey<FormState> key, int index) async {
+  void _addContact(GlobalKey<FormState> key, int index) async {
     if (key.currentState!.validate()) {
       widget.contactList[index].name = _nameControllers[index].text;
       widget.contactList[index].phone = _phoneControllers[index].text;
 
       try {
-        int id =
-            await _db.insert('contacts', widget.contactList[index].toJson());
-
-        print('insert returned $id');
-
+        await _db.insert('contacts', widget.contactList[index].toJson());
         setState(() {
           _saved[index] = true;
         });
@@ -118,16 +114,16 @@ class _AddContactsState extends State<AddContacts> {
                   ),
                 ),
                 IconButton(
-                  key: const Key('submit'),
+                  key: const Key('add'),
                   onPressed: _saved[index]
                       ? null
                       : () {
-                          _submitForm(_contactFormStateKeys[index], index);
+                          _addContact(_contactFormStateKeys[index], index);
                         },
                   disabledColor: Theme.of(context).iconTheme.color,
                   icon: _saved[index]
                       ? const Icon(Icons.check)
-                      : const Icon(Icons.save),
+                      : const Icon(Icons.add),
                 ),
               ],
             ),
@@ -146,24 +142,16 @@ class _AddContactsState extends State<AddContacts> {
   void _dbInit() async {
     var databasesPath = await getDatabasesPath();
     var path = p.join(databasesPath, "contacts.db");
-
-    // await deleteDatabase(path);
-    // var exists = await databaseExists(path);
-    // print(exists);
-
+    // Delete the database
+    await deleteDatabase(path);
     // Open the database, specifying a version and an onCreate callback
     _db = await openDatabase(path, version: 1, onCreate: _onCreate);
-
-    // exists = await databaseExists(path);
-    // print(exists);
   }
 
   _onCreate(Database db, int version) async {
     // Database is created, create the table
     await db.execute(
-        "CREATE TABLE contacts (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, phone TEXT)");
-    // populate data
-    // await db.insert(...);
+        "CREATE TABLE Contacts (name TEXT, phone TEXT, UNIQUE(name, phone))");
   }
 
   @override
@@ -171,7 +159,7 @@ class _AddContactsState extends State<AddContacts> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text('Добавить'),
+        title: const Text('Добавить контакты'),
       ),
       body: Column(
         children: [
@@ -188,7 +176,7 @@ class _AddContactsState extends State<AddContacts> {
                 ),
               );
             },
-            label: const Text('Продолжить'),
+            label: const Text('Список контактов'),
             icon: const Icon(Icons.contacts),
           ),
         ],
