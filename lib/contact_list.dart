@@ -3,78 +3,61 @@ import 'package:testproject/contact.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart' as p;
 
-class ContactList extends StatefulWidget {
-  const ContactList({super.key});
-
-  @override
-  State<StatefulWidget> createState() => _ContactListState();
+Future<List<Contact>> _getContacts() async {
+  var databasesPath = await getDatabasesPath();
+  var path = p.join(databasesPath, "contacts.db");
+  Database db = await openDatabase(path);
+  var mapContactList = await db.query('contacts');
+  List<Contact> list = List<Contact>.from(
+      mapContactList.map((model) => Contact.fromJson(model)));
+  return list;
 }
 
-class _ContactListState extends State<ContactList> {
-  late Database _db;
-  List<Contact>? contactList;
+class ContactList extends StatelessWidget {
+  const ContactList({super.key});
 
-  @override
-  initState() {
-    super.initState();
-    _dbInit().then((value) {
-      setState(() {
-        contactList = value;
-      });
-      print('initState');
-      print(contactList);
-    });
-  }
-
-  Future<List<Contact>> _dbInit() async {
-    var databasesPath = await getDatabasesPath();
-    var path = p.join(databasesPath, "contacts.db");
-    // Delete the database
-    // await deleteDatabase(path);
-    // Open the database, specifying a version and an onCreate callback
-    _db = await openDatabase(path, version: 1, onCreate: _onCreate);
-    var mapContactList = await _db.query('contacts');
-    List<Contact> list = List<Contact>.from(
-        mapContactList.map((model) => Contact.fromJson(model)));
-    return list;
-  }
-
-  _onCreate(Database db, int version) async {
-    // Database is created, create the table
-    await db.execute(
-        "CREATE TABLE Contacts (name TEXT, phone TEXT, UNIQUE(name, phone))");
-  }
-
-  Widget buildContacts() => ListView.builder(
-        shrinkWrap: true,
-        itemCount: contactList!.length,
-        itemBuilder: (context, index) {
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(contactList![index].name),
-              Text(contactList![index].phone),
-            ],
-          );
-        },
-      );
-
+  Widget buildContacts(List<Contact> list) => ListView.builder(
+      shrinkWrap: true,
+      itemCount: list.length,
+      itemBuilder: (context, index) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(list[index].name),
+            Text(list[index].phone),
+          ],
+        );
+      },
+    );
+  
   @override
   Widget build(BuildContext context) {
-    print('contactList == null is ${contactList == null}');
+    // TODO: implement build
     return Scaffold(
       appBar: AppBar(
         title: const Text('Контакты'),
       ),
-      body: Padding(
+      body: 
+      Padding(
         padding: const EdgeInsets.all(10.0),
-        child: (contactList != null)
-            ? buildContacts()
-            : Center(
-                child: Text('Нет данных'),
-              ),
+        child: FutureBuilder(
+          future: _getContacts(),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.done:
+                return buildContacts(snapshot.data);
+              case ConnectionState.none:
+                return const Text('none');
+              case ConnectionState.waiting:
+                return const Center(child: CircularProgressIndicator());
+              case ConnectionState.active:
+                return const Text('active');
+            }
+          },
+        ),
       ),
     );
   }
 }
+
