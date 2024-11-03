@@ -12,15 +12,18 @@ class ContactList extends StatefulWidget {
 
 class _ContactListState extends State<ContactList> {
   late Database _db;
-  late List<Contact> contactList;
+  List<Contact>? contactList;
 
   @override
   initState() {
     super.initState();
     _dbInit().then((value) {
-      contactList = value;
+      setState(() {
+        contactList = value;
+      });
+      print('initState');
+      print(contactList);
     });
-    print('initState');
   }
 
   Future<List<Contact>> _dbInit() async {
@@ -33,7 +36,6 @@ class _ContactListState extends State<ContactList> {
     var mapContactList = await _db.query('contacts');
     List<Contact> list = List<Contact>.from(
         mapContactList.map((model) => Contact.fromJson(model)));
-    print(contactList.length);
     return list;
   }
 
@@ -45,15 +47,14 @@ class _ContactListState extends State<ContactList> {
 
   Widget buildContacts() => ListView.builder(
         shrinkWrap: true,
-        itemCount: contactList.length,
+        itemCount: contactList!.length,
         itemBuilder: (context, index) {
-          print('buildContacts');
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(contactList[index].name),
-              Text(contactList[index].phone),
+              Text(contactList![index].name),
+              Text(contactList![index].phone),
             ],
           );
         },
@@ -61,13 +62,18 @@ class _ContactListState extends State<ContactList> {
 
   @override
   Widget build(BuildContext context) {
+    print('contactList == null is ${contactList == null}');
     return Scaffold(
       appBar: AppBar(
         title: const Text('Контакты'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: buildContacts(),
+        child: (contactList != null)
+            ? buildContacts()
+            : Center(
+                child: Text('Нет данных'),
+              ),
       ),
     );
   }
