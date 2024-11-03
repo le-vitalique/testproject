@@ -18,7 +18,7 @@ class _ContactListState extends State<ContactList> {
   @override
   initState() {
     super.initState();
-    _dbInit();
+    // _dbInit();
     print('initState');
   }
 
@@ -73,7 +73,7 @@ class _ContactListState extends State<ContactList> {
 
   @override
   Widget build(BuildContext context) {
-    print('build');
+    _dbInit();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
