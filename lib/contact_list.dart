@@ -13,11 +13,13 @@ class ContactList extends StatefulWidget {
 class _ContactListState extends State<ContactList> {
   late Database _db;
   late List<Contact> contactList;
+  bool isInit = false;
 
   @override
   initState() {
     super.initState();
     _dbInit();
+    print('initState');
   }
 
   void _dbInit() async {
@@ -32,11 +34,17 @@ class _ContactListState extends State<ContactList> {
     _db = await openDatabase(path, version: 1, onCreate: _onCreate);
 
     // exists = await databaseExists(path);
-    // print(exists);
+    print('dbinit');
+    print(_db.isOpen);
 
     var mapContactList = await _db.query('contacts');
-    contactList = List<Contact>.from(
-        mapContactList.map((model) => Contact.fromJson(model)));
+    setState(() {
+      contactList = List<Contact>.from(
+          mapContactList.map((model) => Contact.fromJson(model)));
+      print(contactList.length);
+    });
+
+    isInit = true;
   }
 
   _onCreate(Database db, int version) async {
@@ -51,6 +59,7 @@ class _ContactListState extends State<ContactList> {
         shrinkWrap: true,
         itemCount: contactList.length,
         itemBuilder: (context, index) {
+          print('buildContacts');
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,12 +73,13 @@ class _ContactListState extends State<ContactList> {
 
   @override
   Widget build(BuildContext context) {
+    print('build');
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('Контакты'),
       ),
-      body: Padding(padding: EdgeInsets.all(10.0), child: buildContacts(),),
+     body: (isInit) ? Padding(padding: EdgeInsets.all(10.0), child: buildContacts(),) : Container(),
     );
   }
 }
