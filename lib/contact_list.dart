@@ -79,7 +79,7 @@ class _ContactListState extends State<ContactList> {
       appBar: AppBar(
         title: const Text('Контакты'),
       ),
-     body: (isInit) ? Padding(padding: EdgeInsets.all(10.0), child: buildContacts(),) : Container(),
+     body: (isInit) ? Padding(padding: const EdgeInsets.all(10.0), child: buildContacts(),) : Container(),
     );
   }
 }
