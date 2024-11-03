@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:testproject/contact.dart';
-import 'package:testproject/found_code_screen.dart';
+import 'package:testproject/add_contacts.dart';
 
 class QrCodeScanner extends StatefulWidget {
   const QrCodeScanner({super.key, required this.title});
@@ -46,13 +46,24 @@ class _QrCodeScannerState extends State<QrCodeScanner> {
     final List<Barcode> barcodes = capture.barcodes;
 
     for (final barcode in barcodes) {
-      late List<Contact> contactsList;
+      late List<Contact> contactList;
       try {
         Iterable contact = jsonDecode(barcode.rawValue.toString());
-        contactsList =
+        contactList =
             List<Contact>.from(contact.map((model) => Contact.fromJson(model)));
       } catch (e) {
-        return;
+        try {
+          final contactMap =
+              jsonDecode(barcode.rawValue.toString()) as Map<String, dynamic>;
+          final Contact contact = Contact.fromJson(contactMap);
+
+          print(contact.phone);
+          print(contact.name);
+          print(contact.id);
+          contactList = [contact];
+        } catch (e) {
+          return;
+        }
       }
 
       // if code is List<Contact> then show FoundCodeScreen
@@ -60,8 +71,8 @@ class _QrCodeScannerState extends State<QrCodeScanner> {
       await Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => FoundCodeScreen(
-            contactsList: contactsList,
+          builder: (context) => AddContacts(
+            contactList: contactList,
           ),
         ),
       );
