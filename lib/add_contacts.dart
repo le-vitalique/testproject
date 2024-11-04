@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:testproject/contact.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart' as p;
 import 'package:testproject/contact_list.dart';
+import 'package:testproject/database_helper.dart';
 
 class AddContacts extends StatefulWidget {
   final List<Contact> contactList;
@@ -29,7 +29,7 @@ class _AddContactsState extends State<AddContacts> {
       widget.contactList[index].phone = _phoneControllers[index].text;
 
       try {
-        await _db.insert('contacts', widget.contactList[index].toJson());
+        await DatabaseHelper.addContact(widget.contactList[index]);
         setState(() {
           _saved[index] = true;
         });
@@ -132,55 +132,32 @@ class _AddContactsState extends State<AddContacts> {
       );
 
   @override
-  initState() {
-    super.initState();
-    _dbInit();
-  }
-
-  late Database _db;
-
-  void _dbInit() async {
-    var databasesPath = await getDatabasesPath();
-    var path = p.join(databasesPath, "contacts.db");
-    // Delete the database
-    await deleteDatabase(path);
-    // Open the database, specifying a version and an onCreate callback
-    _db = await openDatabase(path, version: 1, onCreate: _onCreate);
-  }
-
-  _onCreate(Database db, int version) async {
-    // Database is created, create the table
-    await db.execute(
-        "CREATE TABLE Contacts (name TEXT, phone TEXT, UNIQUE(name, phone))");
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('Добавить контакты'),
       ),
-      body: Column(
-        children: [
-          buildContacts(),
-          const SizedBox(
-            height: 20,
-          ),
-          ElevatedButton.icon(
-            onPressed: () async {
-              await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  // builder: (context) => const ContactList(),
-                  builder: (context) => const ContactList(),
-                ),
-              );
-            },
-            label: const Text('Список контактов'),
-            icon: const Icon(Icons.contacts),
-          ),
-        ],
+      body: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            buildContacts(),
+            ElevatedButton.icon(
+              onPressed: () async {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ContactList(),
+                  ),
+                );
+              },
+              label: const Text('Список контактов'),
+              icon: const Icon(Icons.contacts),
+            ),
+          ],
+        ),
       ),
     );
   }
