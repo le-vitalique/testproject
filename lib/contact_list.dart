@@ -47,12 +47,10 @@ class _ContactListState extends State<ContactList> {
         label: const Text('Удалить все'),
         icon: const Icon(Icons.delete_forever),
       );
-    }
-    else {
+    } else {
       return const SizedBox.shrink();
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -60,18 +58,18 @@ class _ContactListState extends State<ContactList> {
       appBar: AppBar(
         title: const Text('Список контактов'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: FutureBuilder(
+      body:
+        FutureBuilder(
           future: DatabaseHelper.getAllContacts(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.done:
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
+                return Stack(children: [
                   buildContacts(snapshot.data),
-                  _deleteAll((snapshot.data as List<Contact>).length),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: _deleteAll((snapshot.data as List<Contact>).length),
+                  ),
                 ]);
               case ConnectionState.none:
                 return const Text('none');
@@ -82,7 +80,6 @@ class _ContactListState extends State<ContactList> {
             }
           },
         ),
-      ),
     );
   }
 }

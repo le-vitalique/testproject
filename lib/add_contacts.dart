@@ -32,6 +32,11 @@ class _AddContactsState extends State<AddContacts> {
         await DatabaseHelper.addContact(widget.contactList[index]);
         setState(() {
           _saved[index] = true;
+          widget.contactList.removeAt(index);
+          _saved.removeAt(index);
+          _nameControllers.removeAt(index);
+          _phoneControllers.removeAt(index);
+          _contactFormStateKeys.removeAt(index);
         });
       } on DatabaseException catch (e) {
         if (mounted) {
@@ -138,13 +143,12 @@ class _AddContactsState extends State<AddContacts> {
       appBar: AppBar(
         title: const Text('Добавить контакты'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            buildContacts(),
-            ElevatedButton.icon(
+      body: Stack(
+        children: [
+          buildContacts(),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: ElevatedButton.icon(
               onPressed: () async {
                 await Navigator.push(
                   context,
@@ -156,8 +160,8 @@ class _AddContactsState extends State<AddContacts> {
               label: const Text('Список контактов'),
               icon: const Icon(Icons.contacts),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
