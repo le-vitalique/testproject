@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:testproject/contact.dart';
 import 'package:testproject/add_contacts.dart';
+import 'package:testproject/contact_list.dart';
 
 class QrCodeScanner extends StatefulWidget {
   const QrCodeScanner({super.key});
-
 
   @override
   State<QrCodeScanner> createState() => _QrCodeScannerState();
@@ -21,6 +21,17 @@ class _QrCodeScannerState extends State<QrCodeScanner> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Сканер'),
+        actions: [IconButton(onPressed: () async {
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const ContactList(),
+            ),
+          );
+        }, icon: const Icon(Icons.contacts))],
+      ),
       body: Stack(
         children: [
           MobileScanner(
@@ -29,9 +40,8 @@ class _QrCodeScannerState extends State<QrCodeScanner> {
           ),
           Align(
             alignment: Alignment.bottomRight,
-            child: SizedBox(
-              height: 100,
-              width: 100,
+            child: Padding(
+              padding: const EdgeInsets.all(10),
               child: ToggleFlashlightButton(controller: controller),
             ),
           )
@@ -93,43 +103,44 @@ class ToggleFlashlightButton extends StatelessWidget {
         if (!state.isInitialized || !state.isRunning) {
           return const SizedBox.shrink();
         }
-
         switch (state.torchState) {
           case TorchState.auto:
-            return IconButton(
-              color: Colors.white,
-              iconSize: 32.0,
-              icon: const Icon(Icons.flash_auto),
+            return ElevatedButton(
               onPressed: () async {
                 await controller.toggleTorch();
               },
+              style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
+              ),
+              child: const Icon(Icons.flash_auto),
             );
           case TorchState.off:
-            return IconButton(
-              color: Colors.white,
-              iconSize: 32.0,
-              icon: const Icon(Icons.flash_off),
+            return ElevatedButton(
               onPressed: () async {
                 await controller.toggleTorch();
               },
+              style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
+              ),
+              child: const Icon(Icons.flash_off),
             );
           case TorchState.on:
-            return IconButton(
-              color: Colors.white,
-              iconSize: 32.0,
-              icon: const Icon(Icons.flash_on),
+            return ElevatedButton(
               onPressed: () async {
                 await controller.toggleTorch();
               },
+              style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
+              ),
+              child: const Icon(Icons.flash_on),
             );
           case TorchState.unavailable:
-            return const SizedBox.square(
-              dimension: 48.0,
-              child: Icon(
-                Icons.no_flash,
-                size: 32.0,
-                color: Colors.grey,
+            return ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
               ),
+              child: const Icon(Icons.no_flash),
             );
         }
       },

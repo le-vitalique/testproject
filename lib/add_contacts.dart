@@ -40,11 +40,14 @@ class _AddContactsState extends State<AddContacts> {
         });
       } on DatabaseException catch (e) {
         if (mounted) {
+          String msg = (e.isUniqueConstraintError())
+              ? 'Контакт с такими данными уже существует!'
+              : e.toString();
           showDialog(
             context: context,
             builder: (BuildContext context) => (AlertDialog(
               title: const Text('Ошибка!'),
-              content: Text(e.toString()),
+              content: Text(msg),
               actions: [
                 TextButton(
                   child: const Text("OK"),

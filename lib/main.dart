@@ -73,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   if (value == null || value.isEmpty) {
                     return 'Введите имя пользователя';
                   } else if (value != 'admin') {
-                    return 'Неверные данные';
+                    return 'Неверное имя пользователя';
                   } else {
                     return null;
                   }
@@ -94,7 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   if (value == null || value.isEmpty) {
                     return 'Введите пароль';
                   } else if (value != '12345') {
-                    return 'Неверные данные';
+                    return 'Неверный пароль';
                   } else {
                     return null;
                   }
