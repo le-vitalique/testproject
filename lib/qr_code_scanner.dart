@@ -23,14 +23,18 @@ class _QrCodeScannerState extends State<QrCodeScanner> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Сканер'),
-        actions: [IconButton(onPressed: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const ContactList(),
-            ),
-          );
-        }, icon: const Icon(Icons.contacts))],
+        actions: [
+          IconButton(
+              onPressed: () async {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ContactList(),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.contacts))
+        ],
       ),
       body: Stack(
         children: [

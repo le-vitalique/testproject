@@ -18,7 +18,9 @@ final ThemeData appTheme = ThemeData(
   // tested with just a hot reload.
   colorScheme: ColorScheme.fromSeed(seedColor: Colors.redAccent),
   useMaterial3: true,
-  inputDecorationTheme: const InputDecorationTheme(border: OutlineInputBorder(borderRadius: BorderRadius.zero), ),
+  inputDecorationTheme: const InputDecorationTheme(
+    border: OutlineInputBorder(borderRadius: BorderRadius.zero),
+  ),
   appBarTheme: const AppBarTheme(color: Colors.redAccent, centerTitle: true),
   fontFamily: 'Raleway',
 );

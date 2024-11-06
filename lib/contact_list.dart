@@ -58,28 +58,27 @@ class _ContactListState extends State<ContactList> {
       appBar: AppBar(
         title: const Text('Список контактов'),
       ),
-      body:
-        FutureBuilder(
-          future: DatabaseHelper.getAllContacts(),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.done:
-                return Stack(children: [
-                  buildContacts(snapshot.data),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: _deleteAll((snapshot.data as List<Contact>).length),
-                  ),
-                ]);
-              case ConnectionState.none:
-                return const Text('none');
-              case ConnectionState.waiting:
-                return const Center(child: CircularProgressIndicator());
-              case ConnectionState.active:
-                return const Text('active');
-            }
-          },
-        ),
+      body: FutureBuilder(
+        future: DatabaseHelper.getAllContacts(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.done:
+              return Stack(children: [
+                buildContacts(snapshot.data),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: _deleteAll((snapshot.data as List<Contact>).length),
+                ),
+              ]);
+            case ConnectionState.none:
+              return const Text('none');
+            case ConnectionState.waiting:
+              return const Center(child: CircularProgressIndicator());
+            case ConnectionState.active:
+              return const Text('active');
+          }
+        },
+      ),
     );
   }
 }
