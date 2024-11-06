@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:testproject/models/contact.dart';
 import 'package:testproject/helpers/database_helper.dart';
 import 'package:testproject/ui/dialogs.dart';
+import 'package:testproject/ui/widgets.dart';
 
 class ContactList extends StatefulWidget {
   const ContactList({super.key});
@@ -82,16 +83,21 @@ class _ContactListState extends State<ContactList> {
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.done:
-              return Stack(children: [
-                buildContacts(snapshot.data),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: _deleteAll((snapshot.data as List<Contact>).length),
+              if ((snapshot.data as List<Contact>).isNotEmpty) {
+                return Stack(children: [
+                  buildContacts(snapshot.data),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child:
+                          _deleteAll((snapshot.data as List<Contact>).length),
+                    ),
                   ),
-                ),
-              ]);
+                ]);
+              } else {
+                return Center(child: emptyList());
+              }
             case ConnectionState.none:
               return const Text('none');
             case ConnectionState.waiting:
