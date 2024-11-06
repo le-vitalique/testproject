@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+const MaterialColor themeColor = Colors.red;
+
 final ThemeData appTheme = ThemeData(
   // This is the theme of your application.
   //
@@ -16,11 +18,14 @@ final ThemeData appTheme = ThemeData(
   //
   // This works for code too, not just values: Most code changes can be
   // tested with just a hot reload.
-  colorScheme: ColorScheme.fromSeed(seedColor: Colors.redAccent),
+  colorScheme: ColorScheme.fromSeed(seedColor: themeColor),
   useMaterial3: true,
   inputDecorationTheme: const InputDecorationTheme(
     border: OutlineInputBorder(borderRadius: BorderRadius.zero),
   ),
-  appBarTheme: const AppBarTheme(color: Colors.redAccent, centerTitle: true),
+  appBarTheme: AppBarTheme(
+    color: ColorScheme.fromSeed(seedColor: themeColor).inversePrimary,
+    centerTitle: true,
+  ),
   fontFamily: 'Raleway',
 );

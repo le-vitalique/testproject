@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:testproject/contact.dart';
-import 'package:testproject/database_helper.dart';
+import 'package:testproject/models/contact.dart';
+import 'package:testproject/helpers/database_helper.dart';
+import 'package:testproject/ui/dialogs.dart';
 
 class ContactList extends StatefulWidget {
   const ContactList({super.key});
@@ -16,6 +17,7 @@ class _ContactListState extends State<ContactList> {
 
   Widget buildContacts(List<Contact> list) => ListView.builder(
         shrinkWrap: true,
+        padding: const EdgeInsets.only(bottom: 80),
         itemCount: list.length,
         itemBuilder: (context, index) {
           return Card(
@@ -28,8 +30,17 @@ class _ContactListState extends State<ContactList> {
               trailing: IconButton(
                 icon: const Icon(Icons.delete_forever),
                 onPressed: () async {
-                  await DatabaseHelper.deleteContact(list[index]);
-                  setState(() {});
+                  await showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return ConfirmDeleteDialog(
+                        contact: list[index],
+                        callback: () {
+                          setState(() {});
+                        },
+                      );
+                    },
+                  );
                 },
               ),
             ),
@@ -41,8 +52,16 @@ class _ContactListState extends State<ContactList> {
     if (length != 0) {
       return ElevatedButton.icon(
         onPressed: () async {
-          await DatabaseHelper.deleteAllContacts();
-          setState(() {});
+          await showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return ConfirmDeleteDialog(
+                callback: () {
+                  setState(() {});
+                },
+              );
+            },
+          );
         },
         label: const Text('Удалить все'),
         icon: const Icon(Icons.delete_forever),
@@ -59,15 +78,18 @@ class _ContactListState extends State<ContactList> {
         title: const Text('Список контактов'),
       ),
       body: FutureBuilder(
-        future: DatabaseHelper.getAllContacts(),
+        future: DatabaseHelper.instance.getAllContacts(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.done:
               return Stack(children: [
                 buildContacts(snapshot.data),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: _deleteAll((snapshot.data as List<Contact>).length),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: _deleteAll((snapshot.data as List<Contact>).length),
+                  ),
                 ),
               ]);
             case ConnectionState.none:

@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:testproject/contact.dart';
-import 'package:testproject/add_contacts.dart';
-import 'package:testproject/contact_list.dart';
+import 'package:testproject/models/contact.dart';
+import 'package:testproject/ui/screens/add_contacts.dart';
+import 'package:testproject/ui/screens/contact_list.dart';
 
 class QrCodeScanner extends StatefulWidget {
   const QrCodeScanner({super.key});
